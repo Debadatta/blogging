@@ -1,4 +1,36 @@
 Blogging::Application.routes.draw do
+  get "pages/home"
+
+  get "pages/contact"
+
+  get "microposts/index"
+
+  get "microposts/new"
+
+  get "microposts/create"
+
+  get "microposts/show"
+
+  get "microposts/edit"
+
+  get "microposts/update"
+
+  get "microposts/destroy"
+
+  get "users/index"
+
+  get "users/show"
+
+  get "users/new"
+
+  get "users/create"
+
+  get "users/edit"
+
+  get "users/update"
+
+  get "users/destroy"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
