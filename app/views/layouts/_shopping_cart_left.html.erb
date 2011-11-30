@@ -1,0 +1,32 @@
+<div style="width: 100%">
+	<div id="category_left" class="categorylist">
+		<%= link_to 'All Categories', products_path, :class =>'category-link' %>
+		<ul class="category-ul">
+			<% @categories.each do |c|%>
+				<li class="category-li"><%= link_to c.name, products_path(c), :class =>'category-link' %></li>
+			<% end %>
+		</ul>
+	</div>
+	<div class="checkout">		
+		<div class="checkout-header">
+			Your Basket
+		</div>
+		<div id="basket_full" >
+			<% if session[:current_cart]%>
+			<div>
+				<%= render :file => 'products/add_to_cart.html.erb'%>		
+			</div>
+			<% else %>
+			<div class="empty">Your Cart is empty</div>
+			<% end %>
+		</div>
+				
+		<div class="checkout-link" >
+			<div style="float: left;height:56px;margin-top: 1px;">
+				<%= link_to image_tag("checkout.jpeg", :border=>0,:style=>'height:50px;'),'/check_out';%>
+			</div>
+		</div>		
+	</div>
+</div>
+
+

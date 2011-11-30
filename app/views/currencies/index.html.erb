@@ -1,0 +1,28 @@
+<div id="currencies">
+	<div>
+		<% if @currencies.blank?%> 
+			<%= 'No record found' %>
+		<%else%>
+			<% @currencies.each do |c|%>
+				<div class="unit_product">
+					<div class="each_div">
+						<%	if c.id == 1 %>
+							<%= image_tag('india.jpeg')%>
+						<% elsif c.id == 2 %>
+							<%= image_tag('usa.jpeg')%>
+						<% else %>
+							<%= image_tag('jpn.jpeg')%>
+						<% end %>
+					</div>
+					<div class="each_div"><label>Currency Code</label><%= c.currency_code%><br /> <label>Currency Symbol</label><%= c.currency_symbol%></div>
+					<div class="each_div"><%= link_to('Edit', edit_currency_path(c))%><br />
+						<%= link_to "Delete", currency_path(c), :confirm => "Are you sure?", :method=>:delete %>
+					</div>
+				</div>
+			<% end %>
+		<% end %>
+	</div>
+	<div>		
+		<%= link_to 'New Currency', new_currency_path%>
+	</div>
+</div>

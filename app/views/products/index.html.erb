@@ -1,0 +1,37 @@
+<script type="text/javascript">
+	
+</script>
+<div id="products" class="subtype_list clearfix">
+	<div class="clearfix">
+		<% 
+		if !@products.empty?
+			
+			@products.each do |p|
+			@prc = [] 	
+			for prc in p.prices
+				@prc<< prc.price				
+			end
+			@currency_symbol = Currency.find(session['currency_id']).currency_symbol
+			@currency_id = session['currency_id']-1
+			%>
+		<div class="item" style="z-index: 1;" >
+			<div class="product-image">
+				<%= image_tag p.avatar.url(:small), :id => "cropbox" %> 
+			</div>
+			<div class="product-caption">
+				<span class="caption"><label><%= p.name %></label><label><%= number_to_currency(@prc[@currency_id], :unit => @currency_symbol) %></label></span>
+				<div class="caption"><%= link_to 'Add to cart','javascript:void(0);',:onclick=>'add_to_cart("'+p.name+'",'+p.id.to_s+','+@prc[@currency_id].to_s+','+session[:currency_id].to_s+');',:class =>'cart-link'%></div>
+			</div>
+		</div>
+			<% end %>
+		<% else %>
+			<div class="product-caption">
+				<span class="caption"><label><%= 'No recors found' %></label></span>
+				<div class="caption"><%= link_to 'Back',products_path,:class =>'cart-link'%></div>
+			</div>
+		<% end %>
+	</div>
+	<div>		
+		<%= will_paginate @products%>
+	</div>
+</div>

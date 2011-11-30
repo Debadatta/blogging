@@ -1,0 +1,4 @@
+
+<div id="check"><%= render :file => 'products/check_out.html.erb'%></div>
+<div id="payment"><%= link_to image_tag('btn_buynow_LG.gif'), @product.paypal_url(products_path)%></div>
+

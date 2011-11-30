@@ -37,12 +37,19 @@ module Blogging
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:password]
+    config.filter_parameters += [:password, :secret_code]
 
     # Enable the asset pipeline
     config.assets.enabled = true
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+    config.gem "acl9", :source => "http://gemcutter.org", :lib => "acl9"
+    if Rails.env.test?
+      initializer :after => :initialize_dependency_mechanism do
+      # Work around initializer in railties/lib/rails/application/bootstrap.rb
+      ActiveSupport::Dependencies.mechanism = :load
+      end
+    end
   end
 end

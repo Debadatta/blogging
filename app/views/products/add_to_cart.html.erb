@@ -1,0 +1,41 @@
+<div id="cart_product" class="cart-product">
+	<% if !session[:current_cart].blank? %>
+		<% i, @total_price = 0, 0
+		if !@product_names.nil?
+		 @product_names.each do |k,v|  %>
+		<div class='small-cart-product'>
+			<div class="upper">
+				<div style='float:left;width:85%;font-weight: bold;'><%= k %></div>
+				<div style='float:left;width:10%;text-align:right;'>
+		   			<%= link_to image_tag('trash.png',:height => '16px', :width => '16px', :style=>'margin-left:0px;'), 'javascript:void(0);' 'remove_from_cart('+ session[:current_cart].keys[i].to_s+');'; %>
+		   		</div>
+		   	</div>
+			<div class="clear"></div>
+		   	<div align="bottom" class="lower">
+		   		<div style='float:left;width:50%;margin-bottom: 0px;'><%=  @quantity[i].to_s+' * '+number_to_currency(@prices[i].to_f, :unit => session[:currency_symbol])%></div>
+		   		<div style='float:left;width:50%;text-align:right;'>
+		   			<%= number_to_currency(@quantity[i]*@prices[i].to_f, :unit => session[:currency_symbol]) %>
+		   		</div>
+		   	</div>
+		</div>	
+		<% @total_price += (@quantity[i]*@prices[i].to_f)
+			i+=1
+		end 
+		end%>		
+	<%else%>
+		<div class="empty">Your Cart Is Empty</div>
+	<%end%>			
+</div>
+
+<div class="total-cart-price">
+	<div>
+		<div style='float:left;width:50%'><%= 'Total Price' %></div>
+   		<div style='float:left;width:50%;text-align:right;'>
+   			<% if @total_price.nil?%>
+   				<% @total_price = 0 %>
+   			<% end %>
+   			<%= number_to_currency( @total_price, :unit => session[:currency_symbol])  %>			   			
+   		</div>
+   	</div>
+</div>
+	

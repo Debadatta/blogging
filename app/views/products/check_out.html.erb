@@ -1,0 +1,26 @@
+<div id="check_out">
+	<% i, @total_price = 0,0
+	session[:current_cart].each_pair {|c,v|
+		@product = Product.where(:id => c).first
+	%>
+		<div class="check-out-product">
+			<div class="image_item"><%= image_tag @product.avatar.url(:small), :id => "cropbox",:size=> '50x50' %> </div>
+			<div class="name_item"><%= @product_names[i]%></div>
+			<div class="price_item"><%= number_to_currency(@prices[i], :unit => session[:currency_symbol]) %></div>
+			<div class="quantity_item">
+				<% session[:current_cart].each_pair {|key,value|%>
+				<%if c == key %>
+					<%=select_tag('counter'+key.to_s, options_for_select(@counter, @quantity[i].to_i),:onchange => 'chng_cnt(this.id,'+key.to_s+'); return true;') %>
+				<%end%>
+				<%}%>
+			</div>
+			<div class="currency_item"><%= number_to_currency(@quantity[i]*@prices[i].to_f, :unit => session[:currency_symbol]) %></div>
+		</div>
+	<% 	@total_price += (@quantity[i]*@prices[i].to_f)
+	i += 1 
+	} %>
+</div>
+<div class="check-out-price">
+	<div class="total">Total Price</div>
+	<div class="price"><%= number_to_currency(@total_price.to_f, :unit => session[:currency_symbol]) %></div>
+</div>

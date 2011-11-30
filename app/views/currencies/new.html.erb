@@ -1,0 +1,17 @@
+<div class="add_currency">
+	<h1>New Currency</h1>
+	<%= form_for(@currency) do |f| %>
+	<%= render 'shared/error_messages', :object => f.object %>
+		<div class="field">
+			<%= f.label :currency_code %><br />
+			<%= f.text_field :currency_code %>
+		</div>
+		<div class="field">
+			<%= f.label :currency_symbol %><br />
+			<%= f.text_field :currency_symbol %>
+		</div>
+		<div class="actions">
+			<%= f.submit "Add" %>
+		</div>
+	<% end %>
+</div>

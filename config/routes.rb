@@ -1,35 +1,34 @@
-Blogging::Application.routes.draw do
-  get "pages/home"
+Blogging::Application.routes.draw do  
 
-  get "pages/contact"
-
-  get "microposts/index"
-
-  get "microposts/new"
-
-  get "microposts/create"
-
-  get "microposts/show"
-
-  get "microposts/edit"
-
-  get "microposts/update"
-
-  get "microposts/destroy"
-
-  get "users/index"
-
-  get "users/show"
-
-  get "users/new"
-
-  get "users/create"
-
-  get "users/edit"
-
-  get "users/update"
-
-  get "users/destroy"
+  resources :pages
+  
+  match '/contact', :to => 'pages#contact'
+  match '/about', :to => 'pages#about'
+  match '/help', :to => 'pages#help'
+  root :to => 'pages#home'
+  
+  resources :users
+  match '/signup', :to => 'users#new'
+  
+  resources :users
+  resources :sessions, :only => [:new, :create, :destroy]
+  match '/signup', :to => 'users#new'
+  match '/signin', :to => 'sessions#new'
+  match '/signout', :to => 'sessions#destroy'
+  match '/empty_cart', :to=> 'sessions#empty_cart'
+  
+  resources :products
+  match '/new_product', :to => 'products#new'
+  match '/product_list', :to => 'products#list'  
+  match '/add_to_cart', :to => 'products#add_to_cart'
+  match '/remove_from_cart', :to => 'products#remove_from_cart'
+  match '/change_currency', :to => 'products#change_currency'
+  match '/check_out', :to => 'products#checkout_total'
+  match '/change_cart_quantity', :to => 'products#check_out'
+  
+  resources :currencies
+  match '/new_currency', :to =>'currency#new'
+  
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

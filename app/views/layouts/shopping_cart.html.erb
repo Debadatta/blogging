@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+
+<html>
+	<head>
+		<title><%= title %></title>
+		<%= csrf_meta_tag %>
+		<%= render 'layouts/stylesheets' %>
+		<%= javascript_include_tag :application %>
+		<%= javascript_include_tag :jquery %>
+		<%= javascript_include_tag :prototype %>
+		
+		<script type="text/javascript">
+		var total_price = 0;
+			function add_to_cart(product_name,product_id,price,currency_id) {
+				  url = '/add_to_cart?product_id='+product_id; //alert(url);
+				  new Ajax.Request(url, { //works as $.post of jQuery
+					method: 'post',
+					onComplete: function(transport) {
+                $('basket_full').update(transport.responseText);
+				}
+				  
+				});
+
+			}
+			function remove_from_cart(product_id) {
+				  url = '/remove_from_cart?product_id='+product_id; //alert(url);
+				  new Ajax.Request(url, { //works as $.post of jQuery
+					method: 'post',
+					onComplete: function(transport) {
+                	$('basket_full').update(transport.responseText);
+				}
+				  
+				});
+
+			}
+			function formatCurrency(num) {
+				//num = num.toString().replace(/\$|\,/g,'');
+				if(isNaN(num))
+				num = "0";
+				sign = (num == (num = Math.abs(num)));
+				num = Math.floor(num*100+0.50000000001);
+				cents = num%100;
+				num = Math.floor(num/100).toString();
+				if(cents<10)
+				cents = "0" + cents;
+				for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+				num = num.substring(0,num.length-(4*i+3))+','+
+				num.substring(num.length-(4*i+3));
+				//return (((sign)?'':'-') + '$' + num + '.' + cents);
+				return (((sign)?'':'-') +'<%= session[:currency_symbol]%>' + num + '.' + cents);
+			}
+			function empty_cart() {
+				$.ajax({ url: '/empty_cart',
+				  type: 'POST',
+				  dataType: "json",
+				  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+				  data:{},
+				  success: function(response) { 
+				   	$('#cart_total_price').text(formatCurrency(0));
+				    var newVal = $('#current_cart_price').val().replace('0');
+					$('#current_cart_price').val(newVal);
+		   	
+				  }
+				});
+			}
+			function change_currency(code) {
+				url = '/change_currency?currency='+code; //alert(url);
+				  new Ajax.Request(url, { //works as $.post of jQuery
+					method: 'post',
+					onComplete: function(transport) {
+						window.location.href = window.location.href;
+					}				  
+				});
+			}
+			function chng_cnt(id,product_id) {
+				var value = ($(id).getValue());
+				var product_id = product_id;
+				url = 'change_cart_quantity'
+				new Ajax.Request(url,{
+					method: 'Post',
+					parameters: {product_id: product_id, value: value},
+					onComplete: function(transport) {
+						$('check').update(transport.responseText);
+						//alert(transport.responseText);
+					}
+				})
+			}
+			
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<%= render 'layouts/header' %>
+			<div class="flag-menu">
+				<div><strong>Choose Currency</strong></div>
+				<div>
+					<% @currencies.each do |c| %>
+						<% if c.id == 1%>
+							<%= link_to image_tag('india.jpeg',:height=>'20px',:width=>'20px'),'javascript:void(0);',:onclick=>"change_currency('"+c.currency_code+"');",:class=>'flag'; %><%= c.currency_code%>
+						<% elsif c.id ==2 %>
+							<%= link_to image_tag('usa.jpeg',:height=>'20px',:width=>'20px'),'javascript:void(0);',:onclick=>"change_currency('"+c.currency_code+"');",:class=>'flag'; %><%= c.currency_code%>
+						<% else %>
+							<%= link_to image_tag('jpn.jpeg',:height=>'20px',:width=>'20px'),'javascript:void(0);',:onclick=>"change_currency('"+c.currency_code+"');",:class=>'flag';%><%= c.currency_code%>
+						<% end %>
+					<% end %>
+				</div>								
+			</div>
+			<section class="round">				
+				<table class="product-table">					
+					<tr>
+						<td width="240px;" style="vertical-align: top;>
+							<%= render 'layouts/shopping_cart_left' %>
+						</td>
+						<td width="566px;" style="vertical-align: top;">
+							<% flash.each do |key, value| %>
+								<%= content_tag(:div, value, :class => "flash #{key}") %>
+							<% end %>
+							<%= yield %>
+						</td>
+						<td width="250px;" style="vertical-align: top;"></td>
+					</tr>
+				</table>
+			</section>
+			<%= render 'layouts/footer' %>
+		</div>
+	</body>
+</html>
