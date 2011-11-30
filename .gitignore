@@ -11,4 +11,5 @@ log/*.log
 tmp/**/*
 config/database.yml
 db/seed_data/*.csv
+doc/*
 
